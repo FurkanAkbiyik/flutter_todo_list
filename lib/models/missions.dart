@@ -21,4 +21,17 @@ class Missions with ChangeNotifier {
         explanation: '10.00 p.m',
         isDone: false),
   ];
+
+  List<Mission> doneMissions = [
+    Mission(
+        title: 'Game meetup',
+        taskType: TaskType.calendar,
+        explanation: '1.00 p.m',
+        isDone: true),
+    Mission(
+        title: 'Take out trash',
+        taskType: TaskType.category,
+        explanation: '',
+        isDone: true),
+  ];
 }

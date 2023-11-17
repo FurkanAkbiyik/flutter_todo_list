@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list_purple/constants/colors.dart';
 import 'package:todo_list_purple/models/tasktype.dart';
 
 import '../models/mission.dart';
@@ -15,6 +16,7 @@ class _MyCardState extends State<MyCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: widget.mission.isDone == true ? cardIsDoneColor : Colors.white,
       child: Row(
         children: [
           GestureDetector(
@@ -29,7 +31,11 @@ class _MyCardState extends State<MyCard> {
               children: [
                 Text(
                   widget.mission.title,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      decoration: widget.mission.isDone == true
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none),
                 ),
                 Text(widget.mission.explanation),
               ],
@@ -40,7 +46,9 @@ class _MyCardState extends State<MyCard> {
               value: isChecked,
               onChanged: (bool? value) {
                 setState(() {
-                  isChecked = value!;
+                  widget.mission.isDone == true
+                      ? isChecked = true
+                      : isChecked = value!;
                 });
               })
         ],
