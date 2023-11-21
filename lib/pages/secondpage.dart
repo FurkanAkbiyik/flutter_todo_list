@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list_purple/models/tasktype.dart';
 
 class SecondPage extends StatefulWidget {
   const SecondPage({super.key});
@@ -8,6 +9,12 @@ class SecondPage extends StatefulWidget {
 }
 
 class _SecondPageState extends State<SecondPage> {
+  TextEditingController taskTitleController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
+  TextEditingController notesController = TextEditingController();
+
+  TaskType taskType = TaskType.category;
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.sizeOf(context).width;
@@ -39,9 +46,10 @@ class _SecondPageState extends State<SecondPage> {
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
                 width: deviceWidth / 5,
-                child: const TextField(
+                child: TextField(
+                  controller: taskTitleController,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Task title',
                   ),
@@ -60,17 +68,44 @@ class _SecondPageState extends State<SecondPage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                duration: Duration(milliseconds: 300),
+                                content: Text('Category selected')));
+                        setState(() {
+                          taskType = TaskType.category;
+                        });
+                      },
                       child: Image.asset('assets/Category.png')),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                duration: Duration(milliseconds: 300),
+                                content: Text('Category selected')));
+                        setState(() {
+                          taskType = TaskType.calendar;
+                        });
+                      },
                       child: Image.asset('assets/calendar.png')),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child:
-                      GestureDetector(child: Image.asset('assets/contest.png')),
+                  child: GestureDetector(
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                duration: Duration(milliseconds: 300),
+                                content: Text('Category selected')));
+                        setState(() {
+                          taskType = TaskType.contest;
+                        });
+                      },
+                      child: Image.asset('assets/contest.png')),
                 ),
               ],
             ),
@@ -101,9 +136,10 @@ class _SecondPageState extends State<SecondPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
                     width: deviceWidth / 5,
-                    child: const TextField(
+                    child: TextField(
+                      controller: dateController,
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         suffixIcon: Icon(Icons.date_range),
                         border: OutlineInputBorder(),
                         labelText: 'Date',
@@ -117,9 +153,10 @@ class _SecondPageState extends State<SecondPage> {
                   padding: const EdgeInsets.only(right: 8),
                   child: SizedBox(
                     width: deviceWidth / 5,
-                    child: const TextField(
+                    child: TextField(
+                      controller: timeController,
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         suffixIcon: Icon(Icons.lock_clock),
                         border: OutlineInputBorder(),
                         labelText: 'Time',
@@ -129,7 +166,38 @@ class _SecondPageState extends State<SecondPage> {
                 ),
               ),
             ],
-          )
+          ),
+          const Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Notes',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+              )),
+          Expanded(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  height: deviceHeight / 4,
+                  width: deviceWidth / 2,
+                  child: TextField(
+                    controller: notesController,
+                    expands: true,
+                    maxLines: null,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      isDense: true,
+                      border: OutlineInputBorder(),
+                      labelText: 'Notes',
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
