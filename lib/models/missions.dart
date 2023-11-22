@@ -34,4 +34,13 @@ class Missions with ChangeNotifier {
         explanation: '',
         isDone: true),
   ];
+
+  void addMission(Mission newMission) {
+    if (newMission.isDone == false) {
+      missions.add(newMission);
+    } else {
+      doneMissions.add(newMission);
+    }
+    notifyListeners();
+  }
 }
