@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list_purple/constants/colors.dart';
-import 'package:todo_list_purple/models/tasktype.dart';
-
-import '../models/mission.dart';
+import 'package:todo_list_purple/models/todo.dart';
 
 class MyCard extends StatefulWidget {
   const MyCard({super.key, required this.mission});
-  final Mission mission;
+  final Todo mission;
   @override
   State<MyCard> createState() => _MyCardState();
 }
@@ -16,28 +14,29 @@ class _MyCardState extends State<MyCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: widget.mission.isDone == true ? cardIsDoneColor : Colors.white,
+      color: widget.mission.completed == true ? cardIsDoneColor : Colors.white,
       child: Row(
         children: [
-          GestureDetector(
-              child: widget.mission.taskType == TaskType.category
-                  ? Image.asset('assets/Category.png')
-                  : widget.mission.taskType == TaskType.contest
-                      ? Image.asset('assets/contest.png')
-                      : Image.asset('assets/calendar.png')),
+          // GestureDetector(
+          //     child: widget.mission.taskType == TaskType.category
+          //         ? Image.asset('assets/Category.png')
+          //         : widget.mission.taskType == TaskType.contest
+          //             ? Image.asset('assets/contest.png')
+          //             : Image.asset('assets/calendar.png')),
+          Image.asset('assets/Category.png'),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
                 Text(
-                  widget.mission.title,
+                  widget.mission.todo!,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      decoration: widget.mission.isDone == true
+                      decoration: widget.mission.completed == true
                           ? TextDecoration.lineThrough
                           : TextDecoration.none),
                 ),
-                Text(widget.mission.explanation),
+                Text('User : ${widget.mission.userId}'),
               ],
             ),
           ),
@@ -46,7 +45,7 @@ class _MyCardState extends State<MyCard> {
               value: isChecked,
               onChanged: (bool? value) {
                 setState(() {
-                  widget.mission.isDone == true
+                  widget.mission.completed == true
                       ? isChecked = true
                       : isChecked = value!;
                 });

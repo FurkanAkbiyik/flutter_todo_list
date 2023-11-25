@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:todo_list_purple/constants/colors.dart';
 import 'package:todo_list_purple/pages/secondpage.dart';
+import 'package:todo_list_purple/service/todoservice.dart';
 import 'package:todo_list_purple/widgets/mycard.dart';
-
-import '../models/missions.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,6 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    TodoService todoService = TodoService();
     double deviceWidth = MediaQuery.sizeOf(context).width;
     double deviceHeight = MediaQuery.sizeOf(context).height;
     return Scaffold(
@@ -31,18 +30,28 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          SingleChildScrollView(
-            child: ListView.builder(
-              shrinkWrap: true,
-              primary: false,
-              itemCount: Provider.of<Missions>(context).missions.length,
-              itemBuilder: (context, index) {
-                return MyCard(
-                  mission: Provider.of<Missions>(context, listen: false)
-                      .missions[index],
-                );
+          Expanded(
+            child: SingleChildScrollView(
+                child: FutureBuilder(
+              future: todoService.getUncompletedTodos(),
+              builder: (context, snapshot) {
+                print(snapshot.data);
+                if (snapshot.data == null) {
+                  return CircularProgressIndicator();
+                } else {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    primary: false,
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      return MyCard(
+                        mission: snapshot.data![index],
+                      );
+                    },
+                  );
+                }
               },
-            ),
+            )),
           ),
           const Align(
               alignment: Alignment.centerLeft,
@@ -53,17 +62,27 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               )),
-          SingleChildScrollView(
-            child: ListView.builder(
-              shrinkWrap: true,
-              primary: false,
-              itemCount: Provider.of<Missions>(context).doneMissions.length,
-              itemBuilder: (context, index) {
-                return MyCard(
-                    mission:
-                        Provider.of<Missions>(context).doneMissions[index]);
+          Expanded(
+            child: SingleChildScrollView(
+                child: FutureBuilder(
+              future: todoService.getCompletedTodos(),
+              builder: (context, snapshot) {
+                if (snapshot.data == null) {
+                  return CircularProgressIndicator();
+                } else {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    primary: false,
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      return MyCard(
+                        mission: snapshot.data![index],
+                      );
+                    },
+                  );
+                }
               },
-            ),
+            )),
           ),
           SizedBox(height: deviceHeight / 20),
           ElevatedButton(
